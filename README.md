@@ -1,2 +1,2 @@
 # dtw
-Time Series Analysis by using Dynamic Time Warping
+Time Series Analysis by using different Dynamic Time Warping Algorithms
