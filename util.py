@@ -53,3 +53,4 @@ def shrunk_short(ts):
         i = i + 2
     
     return result
+
