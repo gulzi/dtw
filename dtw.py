@@ -139,8 +139,6 @@ def expand_search_window(min_values,max_values,size,mod_count,max_j,radius):
         
         for cell in range(0,window_cells.size):
             cell_col, cell_row = window_cells[cell]
-            if cell_col == -1:
-                continue
             
             if cell_col != min_i and cell_row != max_j:
                 target_col = cell_col - radius
