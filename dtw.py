@@ -259,8 +259,8 @@ def constrained_time_warp(ts1,ts2,min_values,max_values,size,mod_count):
     has_next = False
     if size > 0: has_next = True
     
-    i = 0
-    j = 0
+    i = j = 0
+    
     current_i = i
     current_j = j
     expected_mod = mod_count
@@ -303,7 +303,7 @@ def constrained_time_warp(ts1,ts2,min_values,max_values,size,mod_count):
             val1 = get_val(current_i-1,current_j,min_values,max_values,cost_matrix_cell_values,cost_matrix_col_offset)
             val2 = get_val(current_i-1,current_j-1,min_values,max_values,cost_matrix_cell_values,cost_matrix_col_offset)
             val3 = get_val(current_i,current_j-1,min_values,max_values,cost_matrix_cell_values,cost_matrix_col_offset)
-            global_min_cost = min(val1,min(val2,val3))
+            global_min_cost = min(val1,min(val2,val3)) 
             distance = calc_distance.ecludian_distance(ts1[current_i], ts2[current_j])
             cost_matrix_cell_values = put_val(current_i,current_j,min_values,max_values,cost_matrix_cell_values,cost_matrix_col_offset,distance+global_min_cost)
 
@@ -345,6 +345,8 @@ def constrained_time_warp(ts1,ts2,min_values,max_values,size,mod_count):
         minimum_cost_path[minimum_cost_index] = (i,j)
         
         
+    temp = np.arange(minimum_cost_index)
+    minimum_cost_path = np.delete(minimum_cost_path,temp)
     return minimum_cost,minimum_cost_path
 
     
