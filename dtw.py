@@ -116,8 +116,9 @@ def expand_window(min_values,max_values,size,mod_count,max_j,radius):
         return expand_search_window(min_values,max_values,size,mod_count,max_j,radius-1)
 
 def expand_search_window(min_values,max_values,size,mod_count,max_j,radius):
+
     if radius > 0:
-        window_cells = np.full(size,fill_value=-1, dtype='int8, int8')
+        window_cells = np.full(size,fill_value=-1, dtype='int64, int64')
         next_val = True
         current_i = 0
         current_j = 0
@@ -128,18 +129,19 @@ def expand_search_window(min_values,max_values,size,mod_count,max_j,radius):
         
         while next_val == True:
             window_cells[counter] = (current_i,current_j)
-            current_j = current_j + 1
+            current_j += 1
             if current_j > max_values[current_i]:
-                current_i = current_i +1
+                current_i += 1
                 if current_i <= (min_values.size -1):
                     current_j = min_values[current_i]
                 else:
-                    next_val = False
+                    next_val = False        
             counter = counter + 1
+            
         
         for cell in range(0,window_cells.size):
             cell_col, cell_row = window_cells[cell]
-            
+
             if cell_col != min_i and cell_row != max_j:
                 target_col = cell_col - radius
                 target_row = cell_row + radius
@@ -223,23 +225,21 @@ def expand_search_window(min_values,max_values,size,mod_count,max_j,radius):
 
 def mark_visited (min_values,max_values,size,mod,col,row):
     
-    if min_values.size > col:
-
-        if min_values[col] == -1:
-                min_values[col] = row
-                max_values[col] = row
-                size = size +1
-                mod = mod +1
-        
-        elif min_values[col] > row:
-            size = size + min_values[col]-row
+    if min_values[col] == -1:
             min_values[col] = row
-            mod = mod +1
-        
-        elif max_values[col] < row:
-            size = size + row - max_values[col]
             max_values[col] = row
-            mod = mod +1
+            size += 1
+            mod += 1
+        
+    elif min_values[col] > row:
+        size = size + min_values[col]-row
+        min_values[col] = row
+        mod = mod +1
+        
+    elif max_values[col] < row:
+        size = size + row - max_values[col]
+        max_values[col] = row
+        mod = mod +1
             
     return min_values,max_values,size,mod
 
@@ -309,7 +309,7 @@ def constrained_time_warp(ts1,ts2,min_values,max_values,size,mod_count):
     minimum_cost = get_val(maxI, maxj, min_values, max_values, cost_matrix_cell_values, cost_matrix_col_offset)
     
 
-    minimum_cost_path = np.empty(maxI+maxj-1, dtype='int8, int8')
+    minimum_cost_path = np.empty(maxI+maxj-1, dtype='int64, int64')
             
     minimum_cost_path[:] = -1
     i,j = maxI,maxj
