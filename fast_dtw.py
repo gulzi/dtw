@@ -21,10 +21,6 @@ print(X.size,Y.size)
 #print(ts1.size)
 #print(ts.size)
 
-def calc_path(shrunk_x,shrunk_y,radius,distance="ecludian"):
-    _,path = fast_dtw(shrunk_x,shrunk_y,radius,distance="ecludian")
-    return path
-
 def fast_dtw(ts1,ts2,radius,distance="ecludian"):
     
     if radius < 0:
@@ -40,16 +36,14 @@ def fast_dtw(ts1,ts2,radius,distance="ecludian"):
     # shrunk time series
     shrunk_x,agg_point_size_x = util.shrunk_timeseries(ts1,round(ts1.size/resolation_factor)) 
     shrunk_y,agg_point_size_y = util.shrunk_timeseries(ts2,round(ts2.size/resolation_factor))
+    lowrescost,lowrespath = fast_dtw(shrunk_x,shrunk_y,radius,distance="ecludian")
+    min_values,max_values,size,mod_count = dtw.search_window(ts1,ts2,shrunk_x,shrunk_y,lowrespath,radius,agg_point_size_x,agg_point_size_y)
     
-    min_values,max_values,size,mod_count = dtw.search_window(ts1,ts2,shrunk_x,shrunk_y,calc_path(shrunk_x,shrunk_y,radius,distance="ecludian"),radius,agg_point_size_x,agg_point_size_y)
-    
-    #print("minimum cost: ",min_cost)
-    #print("minimum cost path: ",min_cost_path)
-    cost,path = dtw.constrained_time_warp(ts1,ts2,min_values,max_values,size,mod_count)
-    return cost,path
-    
+
+    return dtw.constrained_time_warp(ts1,ts2,min_values,max_values,size,mod_count)
+
 
 
 #cost, path = fast_dtw(ts1, ts2, 2)
-cost, path = fast_dtw(X, Y, 8)
+cost, path = fast_dtw(X, Y, 10)
 print(cost,path)
