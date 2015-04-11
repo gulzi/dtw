@@ -8,7 +8,7 @@ from numpy import Infinity
 
 def dtw(ts_x,ts_y):
     
-    cost_matrix = np.empty([ts_x.size,ts_y.size])
+    cost_matrix = np.zeros([ts_x.size,ts_y.size])
     
     max_x = ts_x.size -1
     max_y = ts_y.size -1
@@ -27,12 +27,8 @@ def dtw(ts_x,ts_y):
     
             
     minimum_cost = cost_matrix[max_x][max_y]
-    if max_x == max_y:        
-        minimum_cost_path = np.empty(max_x+1, dtype='int8, int8')
-    elif max_x < max_y:
-        minimum_cost_path = np.empty(max_y+1, dtype='int8, int8')
-    else:
-        minimum_cost_path = np.empty(max_x+1, dtype='int8, int8')
+
+    minimum_cost_path = np.empty(max_x+max_y-1, dtype='int64, int64')
             
     minimum_cost_path[:] = -1
     i,j = max_x,max_y
@@ -65,7 +61,9 @@ def dtw(ts_x,ts_y):
         minimum_cost_index = minimum_cost_index -1
         minimum_cost_path[minimum_cost_index] = (i,j)
         
-        
+    temp = np.arange(minimum_cost_index)
+    minimum_cost_path = np.delete(minimum_cost_path,temp)
+  
     return minimum_cost,minimum_cost_path
 
 

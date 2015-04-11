@@ -51,5 +51,5 @@ def fast_dtw(ts1,ts2,radius,distance="ecludian"):
 
 
 #cost, path = fast_dtw(ts1, ts2, 2)
-cost, path = fast_dtw(X, Y, 2)
+cost, path = fast_dtw(X, Y, 8)
 print(cost,path)
